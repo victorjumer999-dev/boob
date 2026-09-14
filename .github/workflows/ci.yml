@@ -71,8 +71,20 @@ jobs:
       - name: Render charts
         run: python scripts/make_charts.py
 
+      # The daily study exercises code paths the monthly one does not (the
+      # frequency parameter, weekend handling, the single-asset guard). It was
+      # not covered here, which is how a column rename in metrics.summarise
+      # reached CI red via run_backtest.py while the whole test suite passed.
+      - name: Run the daily XAUUSD study
+        run: python scripts/run_daily_xauusd.py
+
+      - name: Render daily charts
+        run: python scripts/make_charts_daily.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: study-output
-          path: results/
+          path: |
+            results/
+            results_daily/
           if-no-files-found: error

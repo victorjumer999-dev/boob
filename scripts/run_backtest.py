@@ -88,8 +88,12 @@ def main():
     series = {k: r.returns.loc[common_start:common_end] for k, r in runs.items()}
 
     table = metrics.summary_table(series)
-    display = table[["months", "start", "end", "cagr_%", "vol_%", "sharpe",
-                     "max_dd_%", "hit_rate_%", "worst_month_%", "skew"]].round(3)
+    # metrics.summarise reports frequency-neutral column names ("bars",
+    # "worst_bar_%") now that the library also runs daily studies. At monthly
+    # frequency a bar is a month, so relabel for display only.
+    display = table[["bars", "start", "end", "cagr_%", "vol_%", "sharpe",
+                     "max_dd_%", "hit_rate_%", "worst_bar_%", "skew"]].round(3)
+    display = display.rename(columns={"bars": "months", "worst_bar_%": "worst_month_%"})
     print()
     print(display.to_string())
     table.round(6).to_csv(os.path.join(OUT, "strategy_summary.csv"))
