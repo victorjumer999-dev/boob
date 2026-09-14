@@ -164,3 +164,106 @@ class TestSingleAssetIsRefused:
             prices, bt.BacktestConfig(lookback=126, skip=21, periods_per_year=261)
         )
         assert len(result.returns) > 0
+
+
+class TestInverseVolWeights:
+    """Equal weights are not equal risk on a heterogeneous universe."""
+
+    def _panel(self, n=120, seed=0):
+        idx = pd.date_range("2010-01-31", periods=n, freq="ME")
+        rng = np.random.default_rng(seed)
+        return pd.DataFrame(
+            {
+                "calm": rng.normal(0, 0.02, n),    # ~7% annualised
+                "wild": rng.normal(0, 0.20, n),    # ~69% annualised, like natgas
+            },
+            index=idx,
+        )
+
+    def test_high_vol_asset_gets_a_smaller_weight(self):
+        r = self._panel()
+        w = pd.DataFrame(0.5, index=r.index, columns=r.columns)
+        out = sig.inverse_vol_weights(w, r, window=12).iloc[20:]
+        assert (out["calm"] > out["wild"]).all()
+        # roughly the inverse-volatility ratio
+        assert (out["calm"] / out["wild"]).median() == pytest.approx(10, rel=0.5)
+
+    def test_gross_exposure_is_preserved(self):
+        r = self._panel()
+        w = pd.DataFrame({"calm": 0.5, "wild": -0.5}, index=r.index)
+        out = sig.inverse_vol_weights(w, r, window=12)
+        live = out.loc[out.abs().sum(axis=1) > 0]
+        assert live.abs().sum(axis=1).round(10).eq(1.0).all()
+
+    def test_no_lookahead_future_returns_cannot_change_todays_weights(self):
+        r = self._panel()
+        w = pd.DataFrame(0.5, index=r.index, columns=r.columns)
+        base = sig.inverse_vol_weights(w, r, window=12)
+        tampered = r.copy()
+        tampered.iloc[60:] *= 50.0          # violent regime change, later only
+        after = sig.inverse_vol_weights(w, tampered, window=12)
+        pd.testing.assert_frame_equal(base.iloc[:60], after.iloc[:60])
+
+    def test_rows_without_a_vol_estimate_stay_flat(self):
+        r = self._panel()
+        w = pd.DataFrame(0.5, index=r.index, columns=r.columns)
+        out = sig.inverse_vol_weights(w, r, window=12)
+        assert out.iloc[:11].abs().to_numpy().sum() == 0.0
+
+    def test_cap_stops_one_quiet_asset_dominating(self):
+        idx = pd.date_range("2010-01-31", periods=60, freq="ME")
+        rng = np.random.default_rng(1)
+        r = pd.DataFrame(
+            {"normal": rng.normal(0, 0.05, 60),
+             "frozen": rng.normal(0, 0.0001, 60),   # near-zero vol
+             "other": rng.normal(0, 0.05, 60)},
+            index=idx,
+        )
+        w = pd.DataFrame(1 / 3, index=idx, columns=r.columns)
+        out = sig.inverse_vol_weights(w, r, window=12, max_scale=5.0).iloc[15:]
+        assert (out["frozen"] < 0.95).all()   # capped, not ~100% of the book
+
+    def test_index_and_column_mismatches_raise(self):
+        r = self._panel()
+        w = pd.DataFrame(0.5, index=r.index, columns=r.columns)
+        with pytest.raises(sig.SignalError, match="share an index"):
+            sig.inverse_vol_weights(w.iloc[1:], r, window=12)
+        with pytest.raises(sig.SignalError, match="column order"):
+            sig.inverse_vol_weights(w[["wild", "calm"]], r, window=12)
+
+    def test_bad_parameters_raise(self):
+        r = self._panel()
+        w = pd.DataFrame(0.5, index=r.index, columns=r.columns)
+        with pytest.raises(sig.SignalError, match="window must be"):
+            sig.inverse_vol_weights(w, r, window=1)
+        with pytest.raises(sig.SignalError, match="max_scale"):
+            sig.inverse_vol_weights(w, r, window=12, max_scale=0)
+
+
+class TestRuinDetection:
+    """A book that compounds past zero produces numbers that describe nothing."""
+
+    def test_detects_a_wiped_out_book(self):
+        idx = pd.date_range("2010-01-31", periods=5, freq="ME")
+        # -120% in one month: a long/short book can do this; equity goes negative.
+        r = pd.Series([0.05, 0.02, -1.2, 0.10, 0.03], index=idx)
+        assert metrics.is_ruined(r) is True
+
+    def test_a_surviving_book_is_not_ruined(self):
+        idx = pd.date_range("2010-01-31", periods=5, freq="ME")
+        r = pd.Series([-0.5, -0.5, -0.5, 0.1, 0.1], index=idx)
+        assert metrics.is_ruined(r) is False
+
+    def test_exactly_minus_one_hundred_percent_is_ruin(self):
+        idx = pd.date_range("2010-01-31", periods=3, freq="ME")
+        r = pd.Series([0.05, -1.0, 0.20], index=idx)
+        assert metrics.is_ruined(r) is True
+
+    def test_summarise_surfaces_it(self):
+        idx = pd.date_range("2010-01-31", periods=40, freq="ME")
+        rng = np.random.default_rng(0)
+        ok = pd.Series(rng.normal(0.005, 0.03, 40), index=idx)
+        assert metrics.summarise(ok)["ruined"] is False
+        blown = ok.copy()
+        blown.iloc[10] = -1.4
+        assert metrics.summarise(blown)["ruined"] is True

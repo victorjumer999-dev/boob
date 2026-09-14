@@ -167,6 +167,13 @@ def simple_returns(prices: pd.DataFrame | pd.Series) -> pd.DataFrame | pd.Series
 
 def audit(panel: pd.DataFrame) -> pd.DataFrame:
     """Per-symbol summary used to eyeball a feed before trusting it."""
+    empty = [c for c in panel.columns if panel[c].notna().sum() == 0]
+    if empty:
+        raise DataQualityError(
+            f"column(s) with no observations: {empty}. A column that is all-NaN "
+            "usually means an index mismatch when the panel was assembled "
+            "(e.g. month-start dates joined against month-end dates)."
+        )
     rows = []
     for symbol in panel.columns:
         series = panel[symbol].dropna()

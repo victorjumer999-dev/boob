@@ -6,7 +6,7 @@ A small, auditable momentum research toolkit built from the "Quantitative
 Finance Essentials 04/04 — Momentum Trading" reference sheet, plus a real-data
 backtest of every claim on it.
 
-**Two studies, two null results.**
+**Three studies, three null results.**
 
 * **Monthly, 6 SPDR sectors + SPY (2002–2026)** — the cross-sectional
   long/short strategy the sheet advertises earns Sharpe **0.15** (t = 0.86)
@@ -15,6 +15,12 @@ backtest of every claim on it.
   against buy & hold's **1.18**, gives zero crash protection (its five worst
   days are gold's five worst days), and 1 of 22 grid cells beats the
   benchmark. Write-up: [`REPORT_DAILY.md`](REPORT_DAILY.md).
+* **Monthly, 13 assets across 4 classes (2001–2026)** — widening the universe
+  cut average pairwise correlation from **0.59 to 0.28** and still did not
+  rescue cross-sectional momentum (Sharpe **0.04** vs equal-weight's **0.72**);
+  the pooled predictive coefficient is negative. Also tests whether silver
+  leads gold: it does not (R² = 0.0003 over 15 years), though the two are
+  0.78 correlated. Write-up: [`REPORT_WIDE.md`](REPORT_WIDE.md).
 
 ## Layout
 
@@ -33,24 +39,42 @@ scripts/
   check_results.py       golden-result check: the study must reproduce REPORT.md
   run_daily_xauusd.py    daily XAUUSD study    -> results_daily/
   make_charts_daily.py   daily chart panel     -> results_daily/xauusd_daily.png
+  run_gold_silver.py     gold/silver lead-lag  -> results_daily/
+  run_wide_universe.py   13-asset study        -> results_wide/
+  make_charts_wide.py    wide chart panel      -> results_wide/wide_report.png
 data/raw/          cached monthly adjusted closes (sector ETFs + SPY)
-data/raw_daily/    cached daily XAUUSD spot, weekday bars only
+data/raw_daily/    cached daily XAUUSD + XAGUSD spot, weekday bars only
+data/raw_wide/     cached monthly panel, 13 assets across 4 asset classes
 results/           monthly study output
 results_daily/     daily study output
+results_wide/      wide-universe study output
 ```
 
 ## Run it
 
 ```bash
 pip install -r requirements.txt
-python -m pytest tests/ -q          # 100 passed
+python -m pytest tests/ -q          # 111 passed
 python scripts/run_backtest.py      # prints the study, writes results/
 python scripts/check_results.py     # asserts the headline figures still hold
 python scripts/make_charts.py       # writes results/momentum_report.png
 
 python scripts/run_daily_xauusd.py  # the daily XAUUSD study
 python scripts/make_charts_daily.py # writes results_daily/xauusd_daily.png
+
+python scripts/run_gold_silver.py   # gold/silver correlation and lead-lag
+python scripts/run_wide_universe.py # the 13-asset study
+python scripts/make_charts_wide.py  # writes results_wide/wide_report.png
 ```
+
+## Position sizing
+
+Equal weights are not equal risk. Across the wide universe annualised
+volatility runs from 12% (XLP) to 71% (natural gas) — a 5.7x spread — and an
+equal-weighted book is a natural-gas bet with equities attached. It produced a
+-99.8% drawdown before `BacktestConfig(risk_parity=True)` was available.
+Widening a universe and fixing position sizing are not independent changes:
+breadth is what introduces the heterogeneity that breaks equal weighting.
 
 ## Frequency
 

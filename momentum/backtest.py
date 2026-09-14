@@ -39,6 +39,14 @@ class BacktestConfig:
     # A round trip therefore costs 2x this. Liquid US sector ETFs sit around
     # 1-3bp all-in; 10bp is deliberately conservative.
     cost_bps: float = 10.0
+    # Minimum rankable assets before a cross-sectional book is formed. On a
+    # ragged panel (assets with different start dates) the early months have
+    # fewer names, and ranking 2 of 3 assets is not a cross-section.
+    min_names: int = 1
+    # Scale positions by inverse trailing volatility so each contributes
+    # comparable risk. Off by default to keep existing studies unchanged.
+    risk_parity: bool = False
+    rp_window: int = 12
     target_vol: float | None = None
     vol_window: int = 12
     max_leverage: float = 2.0
@@ -184,7 +192,10 @@ def cross_sectional_momentum(
         top_q=config.top_q,
         bottom_q=config.bottom_q,
         long_only=config.long_only,
+        min_names=config.min_names,
     )
+    if config.risk_parity:
+        weights = sig.inverse_vol_weights(weights, returns, window=config.rp_window)
 
     leverage = None
     if config.target_vol is not None:

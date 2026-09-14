@@ -178,6 +178,49 @@ def timeseries_signal(
     return out
 
 
+def inverse_vol_weights(
+    weights: pd.DataFrame,
+    returns: pd.DataFrame,
+    window: int = 12,
+    max_scale: float = 5.0,
+) -> pd.DataFrame:
+    """Re-weight a book so each position contributes comparable risk.
+
+    Equal weights across a heterogeneous universe are not equal risk. In the
+    wide universe here, natural gas runs ~70% annualised volatility and
+    consumer staples ~12%: an equal-weighted book is a natural-gas bet with
+    some equities attached. Each weight is divided by the asset's trailing
+    volatility and the row is renormalised to the ORIGINAL gross exposure,
+    so this reallocates risk without changing leverage.
+
+    Causal by the same convention as the rest of the library: the volatility
+    at t uses returns through t, and `run_weighted_backtest` applies the
+    single shift before the book meets a return.
+    """
+    if not weights.index.equals(returns.index):
+        raise SignalError("weights and returns must share an index")
+    if list(weights.columns) != list(returns.columns):
+        raise SignalError("weights and returns must share a column order")
+    if window < 2:
+        raise SignalError("window must be at least 2")
+    if max_scale <= 0:
+        raise SignalError("max_scale must be positive")
+
+    vol = returns.rolling(window=window, min_periods=window).std(ddof=1)
+    inv = 1.0 / vol.replace(0.0, np.nan)
+    # Cap relative to the row's median so one quiet asset cannot dominate.
+    median = inv.median(axis=1)
+    inv = inv.clip(upper=median * max_scale, axis=0)
+
+    scaled = weights * inv
+    gross_before = weights.abs().sum(axis=1)
+    gross_after = scaled.abs().sum(axis=1).replace(0.0, np.nan)
+    scaled = scaled.mul(gross_before / gross_after, axis=0)
+    # Rows with no volatility estimate yet stay flat rather than falling
+    # back to the unscaled book.
+    return scaled.where(gross_after.notna(), 0.0).fillna(0.0)
+
+
 def volatility_target_scalar(
     returns: pd.Series,
     target_vol: float = 0.10,

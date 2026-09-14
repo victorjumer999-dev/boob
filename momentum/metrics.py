@@ -96,6 +96,19 @@ def drawdown_series(returns: pd.Series) -> pd.Series:
     return equity / peak - 1.0
 
 
+def is_ruined(returns: pd.Series) -> bool:
+    """True if the compounded book ever hit or passed zero.
+
+    A long/short book can lose more than 100% in a period, and (1+r).cumprod()
+    happily carries on into negative equity, producing a "-103% drawdown" and
+    a CAGR that look like numbers but describe nothing. Real money stops at
+    zero. Any statistic computed past that point is meaningless, so callers
+    should check this before reporting one.
+    """
+    equity = (1.0 + _clean(returns)).cumprod()
+    return bool((equity <= 0).any())
+
+
 def max_drawdown(returns: pd.Series) -> float:
     return float(drawdown_series(returns).min())
 
@@ -148,6 +161,7 @@ def summarise(returns: pd.Series, name: str = "", risk_free: float = 0.0,
         "cagr_%": 100 * cagr(r, periods_per_year),
         "vol_%": 100 * annual_vol(r, periods_per_year),
         "max_dd_%": 100 * max_drawdown(r),
+        "ruined": is_ruined(r),
         "hit_rate_%": 100 * hit_rate(r),
         "best_bar_%": 100 * float(r.max()),
         "worst_bar_%": 100 * float(r.min()),

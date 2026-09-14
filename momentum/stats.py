@@ -108,6 +108,57 @@ def moving_block_bootstrap(
     }
 
 
+def ols_hac(
+    y: np.ndarray | pd.Series,
+    regressors: dict[str, np.ndarray | pd.Series],
+    overlap: int = 1,
+) -> dict:
+    """OLS with Newey-West standard errors and the same overlap floor.
+
+    Rows must already be aligned and ordered by date -- the HAC lag
+    structure is meaningless otherwise. Returns per-coefficient estimate,
+    standard error and t-statistic, plus R-squared.
+    """
+    y = np.asarray(y, dtype=float)
+    names = list(regressors)
+    cols = [np.asarray(regressors[k], dtype=float) for k in names]
+    if any(len(c) != len(y) for c in cols):
+        raise StatsError("regressors and y must be the same length")
+    n = len(y)
+    if n < 30:
+        raise StatsError(f"only {n} usable observations")
+
+    design = np.column_stack([np.ones(n)] + cols)
+    coef, *_ = np.linalg.lstsq(design, y, rcond=None)
+    resid = y - design @ coef
+
+    lags = max(int(np.floor(4 * (n / 100.0) ** (2.0 / 9.0))), overlap - 1)
+    xtx_inv = np.linalg.inv(design.T @ design)
+    scores = design * resid[:, None]
+    meat = scores.T @ scores
+    for lag in range(1, lags + 1):
+        gamma = scores[lag:].T @ scores[:-lag]
+        weight = 1.0 - lag / (lags + 1.0)
+        meat += weight * (gamma + gamma.T)
+    cov = xtx_inv @ meat @ xtx_inv
+    se = np.sqrt(np.diag(cov))
+
+    ss_res = float(resid @ resid)
+    ss_tot = float(((y - y.mean()) ** 2).sum())
+    out = {
+        "n_obs": int(n),
+        "hac_lags": int(lags),
+        "r_squared": 1.0 - ss_res / ss_tot,
+        "alpha": float(coef[0]),
+        "alpha_t": float(coef[0] / se[0]),
+    }
+    for i, name in enumerate(names, start=1):
+        out[name] = float(coef[i])
+        out[f"{name}_se"] = float(se[i])
+        out[f"{name}_t"] = float(coef[i] / se[i])
+    return out
+
+
 def predictive_regression(
     momentum_signal: pd.DataFrame | pd.Series,
     returns: pd.DataFrame | pd.Series,
@@ -137,36 +188,17 @@ def predictive_regression(
     if len(pairs) < 30:
         raise StatsError(f"only {len(pairs)} usable observations")
 
-    x = pairs["m"].to_numpy(dtype=float)
-    y = pairs["r"].to_numpy(dtype=float)
-    design = np.column_stack([np.ones_like(x), x])
-    coef, *_ = np.linalg.lstsq(design, y, rcond=None)
-    resid = y - design @ coef
-
-    # HAC on the score, ordered by date so the lag structure is meaningful.
-    n = len(y)
-    lags = max(int(np.floor(4 * (n / 100.0) ** (2.0 / 9.0))), overlap - 1)
-    xtx_inv = np.linalg.inv(design.T @ design)
-    scores = design * resid[:, None]
-    meat = scores.T @ scores
-    for lag in range(1, lags + 1):
-        gamma = scores[lag:].T @ scores[:-lag]
-        weight = 1.0 - lag / (lags + 1.0)
-        meat += weight * (gamma + gamma.T)
-    cov = xtx_inv @ meat @ xtx_inv
-    se = np.sqrt(np.diag(cov))
-
-    ss_res = float(resid @ resid)
-    ss_tot = float(((y - y.mean()) ** 2).sum())
+    # Ordered by date so the HAC lag structure is meaningful.
+    fit = ols_hac(pairs["r"].to_numpy(), {"beta": pairs["m"].to_numpy()}, overlap=overlap)
     return {
-        "alpha": float(coef[0]),
-        "alpha_t": float(coef[0] / se[0]),
-        "beta": float(coef[1]),
-        "beta_se": float(se[1]),
-        "beta_t": float(coef[1] / se[1]),
-        "r_squared": 1.0 - ss_res / ss_tot,
-        "n_obs": int(n),
-        "hac_lags": int(lags),
+        "alpha": fit["alpha"],
+        "alpha_t": fit["alpha_t"],
+        "beta": fit["beta"],
+        "beta_se": fit["beta_se"],
+        "beta_t": fit["beta_t"],
+        "r_squared": fit["r_squared"],
+        "n_obs": fit["n_obs"],
+        "hac_lags": fit["hac_lags"],
     }
 
 
