@@ -81,10 +81,20 @@ jobs:
       - name: Render daily charts
         run: python scripts/make_charts_daily.py
 
+      - name: Run the gold/silver study
+        run: python scripts/run_gold_silver.py
+
+      - name: Run the wide-universe study
+        run: python scripts/run_wide_universe.py
+
+      - name: Render wide-universe charts
+        run: python scripts/make_charts_wide.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: study-output
           path: |
             results/
             results_daily/
+            results_wide/
           if-no-files-found: error
