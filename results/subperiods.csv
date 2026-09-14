@@ -1,0 +1,13 @@
+period,strategy,months,cagr_%,sharpe,max_dd_%
+2001-2008 (pre-GFC),XS long/short,84,5.96,0.456,-25.3
+2001-2008 (pre-GFC),XS long-only,84,2.26,0.225,-30.8
+2001-2008 (pre-GFC),TS absolute (long/flat),84,4.58,0.656,-12.9
+2001-2008 (pre-GFC),SPY buy & hold,84,-1.53,-0.035,-40.5
+2009-2016 (recovery),XS long/short,96,-1.91,-0.087,-25.0
+2009-2016 (recovery),XS long-only,96,12.77,0.88,-20.2
+2009-2016 (recovery),TS absolute (long/flat),96,10.45,0.991,-15.6
+2009-2016 (recovery),SPY buy & hold,96,14.36,1.025,-18.1
+2017-2026 (recent),XS long/short,116,0.15,0.099,-39.4
+2017-2026 (recent),XS long-only,116,16.75,1.053,-16.3
+2017-2026 (recent),TS absolute (long/flat),116,10.17,0.939,-19.2
+2017-2026 (recent),SPY buy & hold,116,15.38,1.004,-23.9

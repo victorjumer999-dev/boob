@@ -1,0 +1,25 @@
+lookback,skip,book,cagr_%,sharpe,max_dd_%
+3,0,long/short,-16.77,-0.39,-99.2
+3,0,long-only,2.91,0.237,-57.9
+3,1,long/short,-14.82,-0.347,-98.7
+3,1,long-only,1.37,0.186,-68.0
+6,0,long/short,-14.02,-0.275,-98.3
+6,0,long-only,4.21,0.291,-66.7
+6,1,long/short,-11.43,-0.231,-97.7
+6,1,long-only,5.32,0.319,-66.3
+9,0,long/short,-11.67,-0.228,-96.6
+9,0,long-only,-0.26,0.126,-63.4
+9,1,long/short,-8.21,-0.116,-90.5
+9,1,long-only,4.7,0.308,-65.3
+12,0,long/short,-9.08,-0.102,-95.1
+12,0,long-only,5.2,0.327,-62.5
+12,1,long/short,-6.66,0.041,-89.7
+12,1,long-only,7.5,0.404,-74.5
+18,0,long/short,-9.21,-0.04,-94.6
+18,0,long-only,5.67,0.344,-69.1
+18,1,long/short,WIPED OUT,0.015,WIPED OUT
+18,1,long-only,6.57,0.362,-71.3
+24,0,long/short,-14.07,-0.226,-97.7
+24,0,long-only,2.46,0.228,-70.5
+24,1,long/short,WIPED OUT,-0.148,WIPED OUT
+24,1,long-only,5.55,0.365,-70.8

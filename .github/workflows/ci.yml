@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    name: tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Show resolved versions
+        run: python -c "import numpy, pandas, scipy, matplotlib; print('numpy', numpy.__version__); print('pandas', pandas.__version__); print('scipy', scipy.__version__); print('matplotlib', matplotlib.__version__)"
+
+      - name: Run test suite
+        run: python -m pytest tests/ -q
+
+  study:
+    name: reproduce the study
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Runs the whole pipeline end to end on the cached data, then asserts
+      # the headline figures still match the ones quoted in REPORT.md. A
+      # backtest that silently reports different numbers after a library
+      # upgrade is the exact failure mode this repository is about.
+      - name: Run the backtest
+        run: python scripts/run_backtest.py
+
+      - name: Check golden results
+        run: python scripts/check_results.py
+
+      - name: Render charts
+        run: python scripts/make_charts.py
+
+      # The daily study exercises code paths the monthly one does not (the
+      # frequency parameter, weekend handling, the single-asset guard). It was
+      # not covered here, which is how a column rename in metrics.summarise
+      # reached CI red via run_backtest.py while the whole test suite passed.
+      - name: Run the daily XAUUSD study
+        run: python scripts/run_daily_xauusd.py
+
+      - name: Render daily charts
+        run: python scripts/make_charts_daily.py
+
+      - name: Run the gold/silver study
+        run: python scripts/run_gold_silver.py
+
+      - name: Run the wide-universe study
+        run: python scripts/run_wide_universe.py
+
+      - name: Render wide-universe charts
+        run: python scripts/make_charts_wide.py
+
+      - name: Run the final pre-specified test
+        run: python scripts/run_trend_portfolio.py
+
+      - name: Render final charts
+        run: python scripts/make_charts_trend.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: study-output
+          path: |
+            results/
+            results_daily/
+            results_wide/
+          if-no-files-found: error

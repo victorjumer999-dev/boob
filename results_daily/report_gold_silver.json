@@ -1,0 +1,120 @@
+{
+  "sample": {
+    "start": "2011-06-02",
+    "end": "2026-09-11",
+    "bars": 3987
+  },
+  "correlation": {
+    "daily_rho": 0.7807,
+    "rolling_min": 0.6558,
+    "rolling_max": 0.8573,
+    "beta": 1.464,
+    "r2": 0.6095
+  },
+  "lead_lag": [
+    {
+      "predictor": "XAG[t-1]",
+      "target": "XAU[t]",
+      "beta": -0.006,
+      "hac_t": -0.424,
+      "r2": 0.00012,
+      "n": 3986
+    },
+    {
+      "predictor": "XAU[t-1]",
+      "target": "XAG[t]",
+      "beta": 0.0131,
+      "hac_t": 0.348,
+      "r2": 5e-05,
+      "n": 3986
+    },
+    {
+      "predictor": "XAU[t-1]",
+      "target": "XAU[t]",
+      "beta": -0.0005,
+      "hac_t": -0.022,
+      "r2": 0.0,
+      "n": 3986
+    },
+    {
+      "predictor": "XAG[t-1]",
+      "target": "XAG[t]",
+      "beta": -0.0172,
+      "hac_t": -0.616,
+      "r2": 0.0003,
+      "n": 3986
+    }
+  ],
+  "joint": {
+    "r_squared": 0.0003,
+    "alpha": 0.00031,
+    "alpha_t": 1.96753,
+    "gold_lag1": 0.02104,
+    "gold_lag1_se": 0.04535,
+    "gold_lag1_t": 0.46389,
+    "silver_lag1": -0.01473,
+    "silver_lag1_se": 0.02647,
+    "silver_lag1_t": -0.55638
+  },
+  "bonferroni_t": 2.638,
+  "timing_gold": {
+    "Buy & hold gold": {
+      "bars": 964,
+      "years": 3.69,
+      "start": 1672704000000,
+      "end": 1789084800000,
+      "total_return_%": 136.097899,
+      "cagr_%": 26.186685,
+      "vol_%": 20.837553,
+      "max_dd_%": -27.259984,
+      "hit_rate_%": 54.149378,
+      "best_bar_%": 5.62799,
+      "worst_bar_%": -13.094679,
+      "sharpe": 1.221958,
+      "sortino": 1.16412,
+      "calmar": 0.960627,
+      "skew": -1.244892,
+      "kurtosis": 14.194442
+    },
+    "Gold signal -> gold": {
+      "bars": 964,
+      "years": 3.69,
+      "start": 1672704000000,
+      "end": 1789084800000,
+      "total_return_%": 109.22648,
+      "cagr_%": 22.125389,
+      "vol_%": 20.443071,
+      "max_dd_%": -27.259984,
+      "hit_rate_%": 50.518672,
+      "best_bar_%": 5.62799,
+      "worst_bar_%": -13.094679,
+      "sharpe": 1.081414,
+      "sortino": 0.9939,
+      "calmar": 0.811644,
+      "skew": -1.314692,
+      "kurtosis": 15.401693
+    },
+    "Silver signal -> gold": {
+      "bars": 964,
+      "years": 3.69,
+      "start": 1672704000000,
+      "end": 1789084800000,
+      "total_return_%": 82.086634,
+      "cagr_%": 17.616832,
+      "vol_%": 19.970299,
+      "max_dd_%": -27.259984,
+      "hit_rate_%": 46.576763,
+      "best_bar_%": 5.62799,
+      "worst_bar_%": -13.094679,
+      "sharpe": 0.913745,
+      "sortino": 0.81235,
+      "calmar": 0.646252,
+      "skew": -1.38836,
+      "kurtosis": 17.006728
+    }
+  },
+  "diversification": {
+    "rho_5y": 0.8082,
+    "ratio": 0.9565
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "universe": {
+    "n_assets": 13,
+    "months": 322,
+    "start": "1999-12-31",
+    "end": "2026-09-30",
+    "min_names": 11,
+    "max_names": 13
+  },
+  "diversification": {
+    "avg_corr_original7": 0.5931,
+    "avg_corr_wide13": 0.2838,
+    "gold_silver": 0.7968,
+    "wti_brent": 0.9081
+  },
+  "summary": {
+    "XS long/short (13)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": -99.777889,
+      "cagr_%": -21.122317,
+      "vol_%": 46.829536,
+      "max_dd_%": -99.830899,
+      "ruined": false,
+      "hit_rate_%": 51.132686,
+      "best_bar_%": 51.595605,
+      "worst_bar_%": -82.387281,
+      "sharpe": -0.170244,
+      "sortino": -0.148496,
+      "calmar": -0.211581,
+      "skew": -1.418521,
+      "kurtosis": 8.534936
+    },
+    "XS long/short (13, RP)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": -83.069851,
+      "cagr_%": -6.664883,
+      "vol_%": 33.6529,
+      "max_dd_%": -89.720279,
+      "ruined": false,
+      "hit_rate_%": 51.779935,
+      "best_bar_%": 36.549584,
+      "worst_bar_%": -84.969684,
+      "sharpe": 0.041099,
+      "sortino": 0.037568,
+      "calmar": -0.074285,
+      "skew": -1.977998,
+      "kurtosis": 19.058764
+    },
+    "XS long-only (13)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 237.717011,
+      "cagr_%": 4.839835,
+      "vol_%": 30.289104,
+      "max_dd_%": -76.159295,
+      "ruined": false,
+      "hit_rate_%": 56.31068,
+      "best_bar_%": 51.713098,
+      "worst_bar_%": -34.47119,
+      "sharpe": 0.306722,
+      "sortino": 0.311716,
+      "calmar": 0.063549,
+      "skew": 0.43789,
+      "kurtosis": 5.961739
+    },
+    "XS long-only (13, RP)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 543.851595,
+      "cagr_%": 7.500171,
+      "vol_%": 26.964307,
+      "max_dd_%": -74.52164,
+      "ruined": false,
+      "hit_rate_%": 58.576052,
+      "best_bar_%": 42.879111,
+      "worst_bar_%": -34.229056,
+      "sharpe": 0.404468,
+      "sortino": 0.395002,
+      "calmar": 0.100644,
+      "skew": 0.087041,
+      "kurtosis": 4.8878
+    },
+    "TS long/flat (13)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 487.631426,
+      "cagr_%": 7.119406,
+      "vol_%": 10.425005,
+      "max_dd_%": -26.41055,
+      "ruined": false,
+      "hit_rate_%": 61.488673,
+      "best_bar_%": 14.349272,
+      "worst_bar_%": -10.339296,
+      "sharpe": 0.713444,
+      "sortino": 0.677644,
+      "calmar": 0.269567,
+      "skew": -0.104172,
+      "kurtosis": 2.170081
+    },
+    "Equal-weight (13)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 1031.082574,
+      "cagr_%": 9.878419,
+      "vol_%": 14.57048,
+      "max_dd_%": -45.311834,
+      "ruined": false,
+      "hit_rate_%": 64.401294,
+      "best_bar_%": 17.794829,
+      "worst_bar_%": -19.684711,
+      "sharpe": 0.722477,
+      "sortino": 0.659481,
+      "calmar": 0.21801,
+      "skew": -0.508403,
+      "kurtosis": 3.479372
+    },
+    "XS long/short (orig 7)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 32.545367,
+      "cagr_%": 1.100202,
+      "vol_%": 16.084718,
+      "max_dd_%": -39.499639,
+      "ruined": false,
+      "hit_rate_%": 54.045307,
+      "best_bar_%": 13.212939,
+      "worst_bar_%": -19.348277,
+      "sharpe": 0.149472,
+      "sortino": 0.141424,
+      "calmar": 0.027853,
+      "skew": -0.424019,
+      "kurtosis": 1.572736
+    },
+    "XS long/short (orig 7, RP)": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": -11.705951,
+      "cagr_%": -0.482318,
+      "vol_%": 13.500163,
+      "max_dd_%": -41.358161,
+      "ruined": false,
+      "hit_rate_%": 53.721683,
+      "best_bar_%": 11.266813,
+      "worst_bar_%": -17.843861,
+      "sharpe": 0.032445,
+      "sortino": 0.03006,
+      "calmar": -0.011662,
+      "skew": -0.442759,
+      "kurtosis": 1.682261
+    },
+    "SPY buy & hold": {
+      "bars": 309,
+      "years": 25.75,
+      "start": 980899200000,
+      "end": 1790726400000,
+      "total_return_%": 820.690449,
+      "cagr_%": 9.003717,
+      "vol_%": 15.045833,
+      "max_dd_%": -50.797586,
+      "ruined": false,
+      "hit_rate_%": 64.724919,
+      "best_bar_%": 12.698353,
+      "worst_bar_%": -16.518672,
+      "sharpe": 0.650765,
+      "sortino": 0.578629,
+      "calmar": 0.177247,
+      "skew": -0.509668,
+      "kurtosis": 0.913639
+    }
+  },
+  "inference": {
+    "wide 13": {
+      "ann_mean_pct": -7.972,
+      "hac_t": -0.934,
+      "sharpe": -0.1702,
+      "ci": [
+        -0.4821,
+        0.2518
+      ]
+    },
+    "wide 13 RP": {
+      "ann_mean_pct": 1.383,
+      "hac_t": 0.235,
+      "sharpe": 0.0411,
+      "ci": [
+        -0.2195,
+        0.4738
+      ]
+    },
+    "original 7": {
+      "ann_mean_pct": 2.404,
+      "hac_t": 0.886,
+      "sharpe": 0.1495,
+      "ci": [
+        -0.1797,
+        0.4917
+      ]
+    },
+    "difference": {
+      "ann_pct": -1.021,
+      "hac_t": -0.195
+    }
+  },
+  "pooled_regression": {
+    "alpha": 0.011023661397088042,
+    "alpha_t": 4.143010721183904,
+    "beta": -0.016766624435634297,
+    "beta_se": 0.01123105491170332,
+    "beta_t": -1.492880639214277,
+    "r_squared": 0.002838511136806998,
+    "n_obs": 3739,
+    "hac_lags": 11
+  },
+  "grid": {
+    "n_cells": 24,
+    "best_sharpe": 0.404,
+    "bonferroni_t": 3.078
+  },
+  "ts_vs_spy": {
+    "ts_sharpe": 0.7134,
+    "spy_sharpe": 0.6508,
+    "ts_ci": [
+      0.3391,
+      1.1835
+    ],
+    "spy_ci": [
+      0.2321,
+      1.1872
+    ],
+    "vol_scalar": 1.4432,
+    "excess_at_equal_vol_pct": 0.943,
+    "excess_t": 0.326,
+    "ts_maxdd": -26.41,
+    "spy_maxdd": -50.8
+  }
+}
