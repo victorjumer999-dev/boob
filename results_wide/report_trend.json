@@ -1,0 +1,127 @@
+{
+  "n_prior_trials": 97,
+  "summary": {
+    "Trend long/flat": {
+      "bars": 297,
+      "years": 24.75,
+      "start": 1012435200000,
+      "end": 1790726400000,
+      "total_return_%": 786.305199,
+      "cagr_%": 9.215982,
+      "vol_%": 12.01391,
+      "max_dd_%": -24.105169,
+      "ruined": false,
+      "hit_rate_%": 63.973064,
+      "best_bar_%": 11.652086,
+      "worst_bar_%": -14.369173,
+      "sharpe": 0.7966,
+      "sortino": 0.730283,
+      "calmar": 0.382324,
+      "skew": -0.402915,
+      "kurtosis": 2.095909
+    },
+    "Trend long/short": {
+      "bars": 297,
+      "years": 24.75,
+      "start": 1012435200000,
+      "end": 1790726400000,
+      "total_return_%": 262.082907,
+      "cagr_%": 5.33631,
+      "vol_%": 11.137601,
+      "max_dd_%": -28.424968,
+      "ruined": false,
+      "hit_rate_%": 56.902357,
+      "best_bar_%": 17.375751,
+      "worst_bar_%": -7.745414,
+      "sharpe": 0.522502,
+      "sortino": 0.57496,
+      "calmar": 0.187733,
+      "skew": 0.558828,
+      "kurtosis": 2.577107
+    },
+    "Equal-weight (13)": {
+      "bars": 297,
+      "years": 24.75,
+      "start": 1012435200000,
+      "end": 1790726400000,
+      "total_return_%": 1220.530373,
+      "cagr_%": 10.989722,
+      "vol_%": 14.48332,
+      "max_dd_%": -45.311834,
+      "ruined": false,
+      "hit_rate_%": 65.319865,
+      "best_bar_%": 17.794829,
+      "worst_bar_%": -19.684711,
+      "sharpe": 0.795976,
+      "sortino": 0.7266,
+      "calmar": 0.242535,
+      "skew": -0.526212,
+      "kurtosis": 3.788142
+    },
+    "SPY": {
+      "bars": 297,
+      "years": 24.75,
+      "start": 1012435200000,
+      "end": 1790726400000,
+      "total_return_%": 943.305313,
+      "cagr_%": 9.938026,
+      "vol_%": 14.791842,
+      "max_dd_%": -50.797586,
+      "ruined": false,
+      "hit_rate_%": 65.656566,
+      "best_bar_%": 12.698353,
+      "worst_bar_%": -16.518672,
+      "sharpe": 0.71748,
+      "sortino": 0.635692,
+      "calmar": 0.19564,
+      "skew": -0.536956,
+      "kurtosis": 1.107978
+    }
+  },
+  "turnover_long_flat": 5.576,
+  "vs_benchmark": {
+    "excess_pct_yr": 0.009,
+    "hac_t": 0.004,
+    "scaled_sharpe": 0.7966,
+    "bench_sharpe": 0.796,
+    "scaled_maxdd": -28.59,
+    "bench_maxdd": -45.31
+  },
+  "stability": [
+    {
+      "period": "first half",
+      "start": "2002-01-31",
+      "end": "2014-05-31",
+      "months": 149,
+      "cagr_%": 10.62,
+      "sharpe": 0.912,
+      "max_dd_%": -18.8,
+      "bench_sharpe": 0.757
+    },
+    {
+      "period": "second half",
+      "start": "2014-05-31",
+      "end": "2026-09-30",
+      "months": 149,
+      "cagr_%": 7.99,
+      "sharpe": 0.695,
+      "max_dd_%": -24.1,
+      "bench_sharpe": 0.834
+    }
+  ],
+  "permutation": {
+    "real_sharpe": 0.7164,
+    "null_mean": 0.6023,
+    "null_sd": 0.1181,
+    "null_p95": 0.7938,
+    "percentile": 84.0,
+    "p_value": 0.16,
+    "n_draws": 1000
+  },
+  "verdict": {
+    "beats_benchmark_bonferroni": false,
+    "beats_permutation": false,
+    "stable_both_halves": true,
+    "shallower_drawdown": true
+  }
+}

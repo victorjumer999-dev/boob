@@ -6,7 +6,8 @@ A small, auditable momentum research toolkit built from the "Quantitative
 Finance Essentials 04/04 — Momentum Trading" reference sheet, plus a real-data
 backtest of every claim on it.
 
-**Three studies, three null results.**
+**Four studies. No return edge anywhere.** Full verdict:
+[`REPORT_EDGE.md`](REPORT_EDGE.md).
 
 * **Monthly, 6 SPDR sectors + SPY (2002–2026)** — the cross-sectional
   long/short strategy the sheet advertises earns Sharpe **0.15** (t = 0.86)
@@ -21,6 +22,13 @@ backtest of every claim on it.
   the pooled predictive coefficient is negative. Also tests whether silver
   leads gold: it does not (R² = 0.0003 over 15 years), though the two are
   0.78 correlated. Write-up: [`REPORT_WIDE.md`](REPORT_WIDE.md).
+* **The final test** — one pre-specified trend portfolio (blended 3/6/12-month
+  signal, inverse-vol sized, 10% vol target), judged against the Bonferroni
+  threshold for all 97 prior configurations. Against *holding 83% of the same
+  basket and never trading* it earns **+0.01%/yr (t = 0.00)** at identical
+  volatility, and a permutation null that destroys signal timing reproduces
+  **84%** of it. What survives is a shallower drawdown (-24.1% vs -39.1%) at
+  the same return. Write-up: [`REPORT_EDGE.md`](REPORT_EDGE.md).
 
 ## Layout
 
@@ -42,6 +50,8 @@ scripts/
   run_gold_silver.py     gold/silver lead-lag  -> results_daily/
   run_wide_universe.py   13-asset study        -> results_wide/
   make_charts_wide.py    wide chart panel      -> results_wide/wide_report.png
+  run_trend_portfolio.py final pre-specified test -> results_wide/
+  make_charts_trend.py   final chart panel     -> results_wide/trend_report.png
 data/raw/          cached monthly adjusted closes (sector ETFs + SPY)
 data/raw_daily/    cached daily XAUUSD + XAGUSD spot, weekday bars only
 data/raw_wide/     cached monthly panel, 13 assets across 4 asset classes
@@ -65,6 +75,9 @@ python scripts/make_charts_daily.py # writes results_daily/xauusd_daily.png
 python scripts/run_gold_silver.py   # gold/silver correlation and lead-lag
 python scripts/run_wide_universe.py # the 13-asset study
 python scripts/make_charts_wide.py  # writes results_wide/wide_report.png
+
+python scripts/run_trend_portfolio.py  # the final pre-specified test
+python scripts/make_charts_trend.py    # writes results_wide/trend_report.png
 ```
 
 ## Position sizing

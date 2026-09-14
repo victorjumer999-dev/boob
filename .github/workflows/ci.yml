@@ -90,6 +90,12 @@ jobs:
       - name: Render wide-universe charts
         run: python scripts/make_charts_wide.py
 
+      - name: Run the final pre-specified test
+        run: python scripts/run_trend_portfolio.py
+
+      - name: Render final charts
+        run: python scripts/make_charts_trend.py
+
       - uses: actions/upload-artifact@v4
         with:
           name: study-output
