@@ -42,6 +42,10 @@ class BacktestConfig:
     target_vol: float | None = None
     vol_window: int = 12
     max_leverage: float = 2.0
+    # Bars per year for anything that annualises. Defaults to monthly; a
+    # daily study MUST set this (see momentum.data.BARS_PER_YEAR) or every
+    # Sharpe it reports is understated by sqrt(261/12) = 4.66x.
+    periods_per_year: int = PERIODS_PER_YEAR
 
 
 @dataclass
@@ -192,6 +196,7 @@ def cross_sectional_momentum(
             target_vol=config.target_vol,
             window=config.vol_window,
             max_leverage=config.max_leverage,
+            periods_per_year=config.periods_per_year,
         ).reindex(weights.index)
 
     result = run_weighted_backtest(
@@ -227,6 +232,7 @@ def timeseries_momentum(
             target_vol=config.target_vol,
             window=config.vol_window,
             max_leverage=config.max_leverage,
+            periods_per_year=config.periods_per_year,
         ).reindex(weights.index)
 
     result = run_weighted_backtest(

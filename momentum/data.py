@@ -8,8 +8,50 @@ from typing import Iterable
 import numpy as np
 import pandas as pd
 
-# Monthly bars. Everything that annualises uses this single constant.
+# Default frequency for the library is monthly; every function that
+# annualises takes `periods_per_year` so a daily study cannot silently
+# inherit the monthly constant. Getting this wrong does not raise -- it just
+# scales every Sharpe by sqrt(252/12) = 4.6x, which is why it is a parameter
+# and not a module-level assumption.
 PERIODS_PER_YEAR = 12
+
+BARS_PER_YEAR = {
+    "monthly": 12,
+    "weekly": 52,
+    # Weekday (Mon-Fri) bars, not the 252-day US equity convention: a spot
+    # FX/metal series quotes every weekday including US holidays, so it runs
+    # ~261 bars/yr. Measured from the data, not assumed -- see infer_bars_per_year.
+    "daily": 261,
+}
+
+
+def infer_bars_per_year(index: pd.DatetimeIndex) -> float:
+    """Observed bars per calendar year for a DatetimeIndex.
+
+    Used to check a declared frequency against the data. A series that is
+    supposed to be weekday-daily but returns 365 is carrying weekend bars.
+    """
+    if len(index) < 3:
+        raise DataQualityError("need at least 3 bars to infer a frequency")
+    span_years = (index[-1] - index[0]).days / 365.25
+    if span_years <= 0:
+        raise DataQualityError("index spans no time")
+    return len(index) / span_years
+
+
+def drop_weekends(panel):
+    """Remove Saturday and Sunday bars.
+
+    Spot metals and FX do not trade at the weekend, but some vendors emit a
+    calendar-day series anyway. Those bars are not tradeable, and in the
+    XAUUSD feed used here the Saturday bar carries a full weekday's
+    volatility (1.09% vs 1.06%) -- real price movement stamped onto a closed
+    market. Dropping them loses nothing: the Friday-to-Monday return then
+    spans the weekend, which is exactly what a holder experiences.
+    """
+    if not isinstance(panel.index, pd.DatetimeIndex):
+        raise DataQualityError("need a DatetimeIndex to drop weekends")
+    return panel[panel.index.dayofweek < 5]
 
 
 class DataQualityError(ValueError):

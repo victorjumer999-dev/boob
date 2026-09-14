@@ -122,6 +122,17 @@ def quantile_weights(
     `min_names` rankable assets get flat weights rather than a concentrated
     bet on whatever happened to survive.
     """
+    if not isinstance(signal, pd.DataFrame):
+        raise SignalError("quantile_weights needs a wide DataFrame of assets")
+    if signal.shape[1] < 2:
+        # Without at least two assets there is no cross-section to rank, and
+        # the per-row guard below would quietly skip every date -- handing
+        # back an all-zero book that looks like a flat strategy rather than
+        # an impossible one. Refuse instead.
+        raise SignalError(
+            f"cross-sectional weights need at least 2 assets, got {signal.shape[1]}. "
+            "For a single instrument use time-series momentum."
+        )
     if not 0 < top_q <= 1 or not 0 <= bottom_q < 1:
         raise SignalError("quantiles must satisfy 0 < top_q <= 1 and 0 <= bottom_q < 1")
     if top_q + bottom_q > 1:
@@ -172,6 +183,7 @@ def volatility_target_scalar(
     target_vol: float = 0.10,
     window: int = 12,
     max_leverage: float = 2.0,
+    periods_per_year: int = PERIODS_PER_YEAR,
 ) -> pd.Series:
     """Leverage multiplier that steers realised vol toward `target_vol`.
 
@@ -183,7 +195,7 @@ def volatility_target_scalar(
     if max_leverage <= 0:
         raise SignalError("max_leverage must be positive")
     realised = returns.rolling(window=window, min_periods=window).std(ddof=1) * np.sqrt(
-        PERIODS_PER_YEAR
+        periods_per_year
     )
     realised = realised.where(realised > 0)
     return (target_vol / realised).clip(upper=max_leverage)

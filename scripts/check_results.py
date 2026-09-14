@@ -23,7 +23,7 @@ REPORT = os.path.join(ROOT, "results", "report.json")
 EXPECTED = [
     ("data.months", 321, 0),
     ("data.dropped_partial_bars", 1, 0),
-    ("summary.XS long/short.months", 296, 0),
+    ("summary.XS long/short.bars", 296, 0),
     ("summary.XS long/short.sharpe", 0.147884, 5e-4),
     ("summary.XS long/short.cagr_%", 1.0851, 5e-3),
     ("summary.XS long/short.max_dd_%", -41.5915, 5e-3),

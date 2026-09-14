@@ -6,11 +6,15 @@ A small, auditable momentum research toolkit built from the "Quantitative
 Finance Essentials 04/04 — Momentum Trading" reference sheet, plus a real-data
 backtest of every claim on it.
 
-**Short version of the result:** on this universe the cross-sectional
-long/short momentum strategy the sheet advertises earns a Sharpe of **0.15**
-(t = 0.86) after costs and loses to SPY by 8.4%/yr. The prior-return ladder is
-monotone, but the spread is too small to survive the short leg and turnover.
-Full write-up in [`REPORT.md`](REPORT.md).
+**Two studies, two null results.**
+
+* **Monthly, 6 SPDR sectors + SPY (2002–2026)** — the cross-sectional
+  long/short strategy the sheet advertises earns Sharpe **0.15** (t = 0.86)
+  after costs and loses to SPY by 8.4%/yr. Write-up: [`REPORT.md`](REPORT.md).
+* **Daily, XAUUSD (5 years)** — time-series momentum earns Sharpe **1.09**
+  against buy & hold's **1.18**, gives zero crash protection (its five worst
+  days are gold's five worst days), and 1 of 22 grid cells beats the
+  benchmark. Write-up: [`REPORT_DAILY.md`](REPORT_DAILY.md).
 
 ## Layout
 
@@ -24,22 +28,42 @@ momentum/          the library
   synth.py         synthetic panels with a *known* planted edge, for the tests
 tests/             83 tests, incl. explicit look-ahead traps
 scripts/
-  run_backtest.py   the full study -> results/
-  make_charts.py    the chart panel -> results/momentum_report.png
-  check_results.py  golden-result check: the study must reproduce REPORT.md
-data/raw/          cached monthly adjusted closes (Alpha Vantage)
-results/           CSVs, report.json, chart
+  run_backtest.py        monthly sector study  -> results/
+  make_charts.py         monthly chart panel   -> results/momentum_report.png
+  check_results.py       golden-result check: the study must reproduce REPORT.md
+  run_daily_xauusd.py    daily XAUUSD study    -> results_daily/
+  make_charts_daily.py   daily chart panel     -> results_daily/xauusd_daily.png
+data/raw/          cached monthly adjusted closes (sector ETFs + SPY)
+data/raw_daily/    cached daily XAUUSD spot, weekday bars only
+results/           monthly study output
+results_daily/     daily study output
 ```
 
 ## Run it
 
 ```bash
 pip install -r requirements.txt
-python -m pytest tests/ -q          # 83 passed
+python -m pytest tests/ -q          # 100 passed
 python scripts/run_backtest.py      # prints the study, writes results/
 python scripts/check_results.py     # asserts the headline figures still hold
 python scripts/make_charts.py       # writes results/momentum_report.png
+
+python scripts/run_daily_xauusd.py  # the daily XAUUSD study
+python scripts/make_charts_daily.py # writes results_daily/xauusd_daily.png
 ```
+
+## Frequency
+
+The library defaults to monthly but **never assumes** a frequency when
+annualising: every function that scales by time takes `periods_per_year`, and
+`BacktestConfig` carries it. Using 12 where 261 belongs is a silent 4.66x
+error in every Sharpe — it raises nothing and the number still looks
+plausible, so `tests/test_frequency.py` pins the scaling law explicitly.
+
+`data.infer_bars_per_year` measures the observed frequency from the index, and
+the daily study aborts if it disagrees with the declared constant. That check
+is what caught the XAUUSD feed shipping weekend bars (365/yr, with Saturday
+carrying a full weekday's volatility — see `REPORT_DAILY.md` §7).
 
 ## CI
 

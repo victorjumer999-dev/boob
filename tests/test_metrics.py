@@ -80,7 +80,7 @@ class TestSummary:
         b = series(list(rng.normal(0.004, 0.03, 200)))
         table = metrics.summary_table({"alpha": a, "beta": b})
         assert list(table.index) == ["alpha", "beta"]
-        assert table.loc["alpha", "months"] == 200
+        assert table.loc["alpha", "bars"] == 200
 
     def test_undefined_sub_metrics_become_nan_not_a_crash(self):
         table = metrics.summary_table({"winner": series([0.01] * 36)})

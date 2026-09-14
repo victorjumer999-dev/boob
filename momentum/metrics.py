@@ -37,23 +37,24 @@ def _is_degenerate(spread: float, sample: pd.Series) -> bool:
     return spread <= max(scale, 1e-12) * 1e-10
 
 
-def cagr(returns: pd.Series) -> float:
+def cagr(returns: pd.Series, periods_per_year: int = PERIODS_PER_YEAR) -> float:
     r = _clean(returns)
     growth = float((1.0 + r).prod())
     if growth <= 0:
         return -1.0  # the book was wiped out; CAGR is undefined below this
-    years = len(r) / PERIODS_PER_YEAR
+    years = len(r) / periods_per_year
     return growth ** (1.0 / years) - 1.0
 
 
-def annual_vol(returns: pd.Series) -> float:
+def annual_vol(returns: pd.Series, periods_per_year: int = PERIODS_PER_YEAR) -> float:
     r = _clean(returns)
     if len(r) < 2:
         raise MetricError("need at least 2 observations for a volatility")
-    return float(r.std(ddof=1)) * np.sqrt(PERIODS_PER_YEAR)
+    return float(r.std(ddof=1)) * np.sqrt(periods_per_year)
 
 
-def sharpe(returns: pd.Series, risk_free: float = 0.0) -> float:
+def sharpe(returns: pd.Series, risk_free: float = 0.0,
+           periods_per_year: int = PERIODS_PER_YEAR) -> float:
     """E[R - Rf] / sigma_p, annualised -- the poster's Sharpe formula.
 
     `risk_free` is an *annual* rate; it is de-annualised geometrically before
@@ -62,17 +63,18 @@ def sharpe(returns: pd.Series, risk_free: float = 0.0) -> float:
     r = _clean(returns)
     if len(r) < 2:
         raise MetricError("need at least 2 observations for a Sharpe ratio")
-    rf_period = (1.0 + risk_free) ** (1.0 / PERIODS_PER_YEAR) - 1.0
+    rf_period = (1.0 + risk_free) ** (1.0 / periods_per_year) - 1.0
     excess = r - rf_period
     sd = float(excess.std(ddof=1))
     if _is_degenerate(sd, excess):
         raise MetricError("zero volatility: Sharpe is undefined, not infinite")
-    return float(excess.mean()) / sd * np.sqrt(PERIODS_PER_YEAR)
+    return float(excess.mean()) / sd * np.sqrt(periods_per_year)
 
 
-def sortino(returns: pd.Series, risk_free: float = 0.0) -> float:
+def sortino(returns: pd.Series, risk_free: float = 0.0,
+            periods_per_year: int = PERIODS_PER_YEAR) -> float:
     r = _clean(returns)
-    rf_period = (1.0 + risk_free) ** (1.0 / PERIODS_PER_YEAR) - 1.0
+    rf_period = (1.0 + risk_free) ** (1.0 / periods_per_year) - 1.0
     excess = r - rf_period
     downside = excess[excess < 0]
     if downside.empty:
@@ -80,7 +82,7 @@ def sortino(returns: pd.Series, risk_free: float = 0.0) -> float:
     dd = float(np.sqrt((downside ** 2).mean()))
     if _is_degenerate(dd, excess):
         raise MetricError("zero downside deviation: Sortino is undefined")
-    return float(excess.mean()) / dd * np.sqrt(PERIODS_PER_YEAR)
+    return float(excess.mean()) / dd * np.sqrt(periods_per_year)
 
 
 def drawdown_series(returns: pd.Series) -> pd.Series:
@@ -98,11 +100,11 @@ def max_drawdown(returns: pd.Series) -> float:
     return float(drawdown_series(returns).min())
 
 
-def calmar(returns: pd.Series) -> float:
+def calmar(returns: pd.Series, periods_per_year: int = PERIODS_PER_YEAR) -> float:
     mdd = abs(max_drawdown(returns))
     if mdd == 0:
         raise MetricError("no drawdown: Calmar is undefined")
-    return cagr(returns) / mdd
+    return cagr(returns, periods_per_year) / mdd
 
 
 def hit_rate(returns: pd.Series) -> float:
@@ -132,42 +134,48 @@ def worst_drawdown_window(returns: pd.Series) -> dict:
     }
 
 
-def summarise(returns: pd.Series, name: str = "", risk_free: float = 0.0) -> dict:
+def summarise(returns: pd.Series, name: str = "", risk_free: float = 0.0,
+              periods_per_year: int = PERIODS_PER_YEAR) -> dict:
     """One row of headline statistics, safe to build a table from."""
     r = _clean(returns)
     row = {
         "strategy": name,
-        "months": len(r),
+        "bars": len(r),
+        "years": round(len(r) / periods_per_year, 2),
         "start": r.index[0].date(),
         "end": r.index[-1].date(),
         "total_return_%": 100 * (float((1 + r).prod()) - 1),
-        "cagr_%": 100 * cagr(r),
-        "vol_%": 100 * annual_vol(r),
+        "cagr_%": 100 * cagr(r, periods_per_year),
+        "vol_%": 100 * annual_vol(r, periods_per_year),
         "max_dd_%": 100 * max_drawdown(r),
         "hit_rate_%": 100 * hit_rate(r),
-        "best_month_%": 100 * float(r.max()),
-        "worst_month_%": 100 * float(r.min()),
+        "best_bar_%": 100 * float(r.max()),
+        "worst_bar_%": 100 * float(r.min()),
     }
     # A degenerate series has no defined Sharpe/Sortino/Calmar. In a summary
     # table that is a NaN cell, not a reason to abort the whole report -- but
     # the underlying functions still raise, so a caller asking for one metric
     # in isolation is never handed a fabricated number.
     try:
-        row["sharpe"] = sharpe(r, risk_free)
+        row["sharpe"] = sharpe(r, risk_free, periods_per_year)
     except MetricError:
         row["sharpe"] = float("nan")
     try:
-        row["sortino"] = sortino(r, risk_free)
+        row["sortino"] = sortino(r, risk_free, periods_per_year)
     except MetricError:
         row["sortino"] = float("nan")
     try:
-        row["calmar"] = calmar(r)
+        row["calmar"] = calmar(r, periods_per_year)
     except MetricError:
         row["calmar"] = float("nan")
     row["skew"], row["kurtosis"] = skew_kurt(r)
     return row
 
 
-def summary_table(results: dict[str, pd.Series], risk_free: float = 0.0) -> pd.DataFrame:
-    rows = [summarise(series, name=name, risk_free=risk_free) for name, series in results.items()]
+def summary_table(results: dict[str, pd.Series], risk_free: float = 0.0,
+                  periods_per_year: int = PERIODS_PER_YEAR) -> pd.DataFrame:
+    rows = [
+        summarise(series, name=name, risk_free=risk_free, periods_per_year=periods_per_year)
+        for name, series in results.items()
+    ]
     return pd.DataFrame(rows).set_index("strategy")

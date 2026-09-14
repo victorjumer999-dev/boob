@@ -183,5 +183,5 @@ def deflated_threshold(n_trials: int, alpha: float = 0.05) -> float:
     return float(sps.norm.ppf(1 - alpha / (2 * n_trials)))
 
 
-def annualised_mean(returns: pd.Series) -> float:
-    return float(returns.mean()) * PERIODS_PER_YEAR
+def annualised_mean(returns: pd.Series, periods_per_year: int = PERIODS_PER_YEAR) -> float:
+    return float(returns.mean()) * periods_per_year
