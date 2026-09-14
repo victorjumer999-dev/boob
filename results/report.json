@@ -1,0 +1,404 @@
+{
+  "data": {
+    "symbols": [
+      "XLE",
+      "XLF",
+      "XLK",
+      "XLP",
+      "XLV",
+      "XLY",
+      "SPY"
+    ],
+    "months": 321,
+    "start": "1999-12-31",
+    "end": "2026-08-31",
+    "dropped_partial_bars": 1
+  },
+  "summary": {
+    "XS long/short": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 30.501235,
+      "cagr_%": 1.085085,
+      "vol_%": 15.631727,
+      "max_dd_%": -41.591455,
+      "hit_rate_%": 53.378378,
+      "best_month_%": 13.212939,
+      "worst_month_%": -16.614387,
+      "sharpe": 0.147884,
+      "sortino": 0.141821,
+      "calmar": 0.026089,
+      "skew": -0.335167,
+      "kurtosis": 1.044408
+    },
+    "XS long-only": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 1266.643556,
+      "cagr_%": 11.183433,
+      "vol_%": 15.468406,
+      "max_dd_%": -38.363787,
+      "hit_rate_%": 66.216216,
+      "best_month_%": 16.985979,
+      "worst_month_%": -15.804371,
+      "sharpe": 0.76559,
+      "sortino": 0.700966,
+      "calmar": 0.29151,
+      "skew": -0.278526,
+      "kurtosis": 1.016562
+    },
+    "XS L/S vol-tgt 10%": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 44.000785,
+      "cagr_%": 1.489286,
+      "vol_%": 11.058808,
+      "max_dd_%": -25.330944,
+      "hit_rate_%": 53.378378,
+      "best_month_%": 13.535681,
+      "worst_month_%": -9.876497,
+      "sharpe": 0.188907,
+      "sortino": 0.187359,
+      "calmar": 0.058793,
+      "skew": -0.028194,
+      "kurtosis": 1.31509
+    },
+    "TS absolute (L/S)": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 365.66471,
+      "cagr_%": 6.434899,
+      "vol_%": 11.052611,
+      "max_dd_%": -34.844658,
+      "hit_rate_%": 62.5,
+      "best_month_%": 10.574252,
+      "worst_month_%": -10.451773,
+      "sharpe": 0.620906,
+      "sortino": 0.585555,
+      "calmar": 0.184674,
+      "skew": -0.290229,
+      "kurtosis": 1.066679
+    },
+    "TS absolute (long/flat)": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 672.954198,
+      "cagr_%": 8.644122,
+      "vol_%": 9.946164,
+      "max_dd_%": -19.195666,
+      "hit_rate_%": 63.513514,
+      "best_month_%": 10.271042,
+      "worst_month_%": -9.368572,
+      "sharpe": 0.88599,
+      "sortino": 0.81089,
+      "calmar": 0.450316,
+      "skew": -0.283598,
+      "kurtosis": 1.323141
+    },
+    "Equal-weight sectors": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 979.650525,
+      "cagr_%": 10.125999,
+      "vol_%": 14.639624,
+      "max_dd_%": -48.905129,
+      "hit_rate_%": 66.216216,
+      "best_month_%": 15.39847,
+      "worst_month_%": -16.64144,
+      "sharpe": 0.735112,
+      "sortino": 0.650835,
+      "calmar": 0.207054,
+      "skew": -0.501397,
+      "kurtosis": 1.855263
+    },
+    "SPY buy & hold": {
+      "months": 296,
+      "start": 1012435200000,
+      "end": 1788134400000,
+      "total_return_%": 947.072892,
+      "cagr_%": 9.989294,
+      "vol_%": 14.814759,
+      "max_dd_%": -50.797586,
+      "hit_rate_%": 65.878378,
+      "best_month_%": 12.698353,
+      "worst_month_%": -16.518672,
+      "sharpe": 0.719775,
+      "sortino": 0.635561,
+      "calmar": 0.196649,
+      "skew": -0.539176,
+      "kurtosis": 1.098668
+    }
+  },
+  "turnover": {
+    "XS long/short": {
+      "ann_turnover_x": 10.2568,
+      "ann_cost_drag_pct": 1.0338
+    },
+    "XS long-only": {
+      "ann_turnover_x": 5.4324,
+      "ann_cost_drag_pct": 0.5473
+    },
+    "XS L/S vol-tgt 10%": {
+      "ann_turnover_x": 8.9631,
+      "ann_cost_drag_pct": 0.8992
+    },
+    "TS absolute (L/S)": {
+      "ann_turnover_x": 2.3378,
+      "ann_cost_drag_pct": 0.2338
+    },
+    "TS absolute (long/flat)": {
+      "ann_turnover_x": 1.1689,
+      "ann_cost_drag_pct": 0.1169
+    },
+    "Equal-weight sectors": {
+      "ann_turnover_x": 0.0,
+      "ann_cost_drag_pct": 0.0
+    },
+    "SPY buy & hold": {
+      "ann_turnover_x": 0.0,
+      "ann_cost_drag_pct": 0.0
+    }
+  },
+  "hac": {
+    "mean": 0.0019264021296468861,
+    "hac_se": 0.0022542498645002525,
+    "t_stat": 0.8545645981768542,
+    "lags_used": 11,
+    "n": 296
+  },
+  "bootstrap_sharpe": {
+    "point": 0.1478840198173717,
+    "ci_low": -0.24841475341607008,
+    "ci_high": 0.46140042028619765,
+    "p_gt_zero": 0.72575,
+    "block": 7,
+    "n_boot": 4000
+  },
+  "hac_excess_vs_spy": {
+    "mean": -0.006959669949254024,
+    "hac_se": 0.004179941997954595,
+    "t_stat": -1.6650159147327057,
+    "lags_used": 11,
+    "n": 296
+  },
+  "predictive_regression": {
+    "alpha": 0.007997161813430449,
+    "alpha_t": 2.5124660585754723,
+    "beta": 0.004793851665207031,
+    "beta_se": 0.015534688936772628,
+    "beta_t": 0.30859012914377454,
+    "r_squared": 0.0002746268878192071,
+    "n_obs": 1848,
+    "hac_lags": 11
+  },
+  "buckets": {
+    "1": {
+      "mean": 0.007284,
+      "std": 0.064901,
+      "count": 616,
+      "mean_%": 0.728391,
+      "ann_%": 9.099497,
+      "t_stat": 2.785505
+    },
+    "2": {
+      "mean": 0.008467,
+      "std": 0.047906,
+      "count": 616,
+      "mean_%": 0.846684,
+      "ann_%": 10.646955,
+      "t_stat": 4.386506
+    },
+    "3": {
+      "mean": 0.009553,
+      "std": 0.053303,
+      "count": 616,
+      "mean_%": 0.95532,
+      "ann_%": 12.085779,
+      "t_stat": 4.448274
+    }
+  },
+  "bucket_spread_monthly_pct": 0.2269,
+  "grid": {
+    "n_trials": 24,
+    "raw_hits": 12,
+    "expected_by_chance": 1.2000000000000002,
+    "bonferroni_t": 3.078,
+    "bonferroni_hits": 11
+  },
+  "subperiods": [
+    {
+      "period": "2001-2008 (pre-GFC)",
+      "strategy": "XS long/short",
+      "months": 84,
+      "cagr_%": 5.96,
+      "sharpe": 0.456,
+      "max_dd_%": -25.3
+    },
+    {
+      "period": "2001-2008 (pre-GFC)",
+      "strategy": "XS long-only",
+      "months": 84,
+      "cagr_%": 2.26,
+      "sharpe": 0.225,
+      "max_dd_%": -30.8
+    },
+    {
+      "period": "2001-2008 (pre-GFC)",
+      "strategy": "TS absolute (long/flat)",
+      "months": 84,
+      "cagr_%": 4.58,
+      "sharpe": 0.656,
+      "max_dd_%": -12.9
+    },
+    {
+      "period": "2001-2008 (pre-GFC)",
+      "strategy": "SPY buy & hold",
+      "months": 84,
+      "cagr_%": -1.53,
+      "sharpe": -0.035,
+      "max_dd_%": -40.5
+    },
+    {
+      "period": "2009-2016 (recovery)",
+      "strategy": "XS long/short",
+      "months": 96,
+      "cagr_%": -1.91,
+      "sharpe": -0.087,
+      "max_dd_%": -25.0
+    },
+    {
+      "period": "2009-2016 (recovery)",
+      "strategy": "XS long-only",
+      "months": 96,
+      "cagr_%": 12.77,
+      "sharpe": 0.88,
+      "max_dd_%": -20.2
+    },
+    {
+      "period": "2009-2016 (recovery)",
+      "strategy": "TS absolute (long/flat)",
+      "months": 96,
+      "cagr_%": 10.45,
+      "sharpe": 0.991,
+      "max_dd_%": -15.6
+    },
+    {
+      "period": "2009-2016 (recovery)",
+      "strategy": "SPY buy & hold",
+      "months": 96,
+      "cagr_%": 14.36,
+      "sharpe": 1.025,
+      "max_dd_%": -18.1
+    },
+    {
+      "period": "2017-2026 (recent)",
+      "strategy": "XS long/short",
+      "months": 116,
+      "cagr_%": 0.15,
+      "sharpe": 0.099,
+      "max_dd_%": -39.4
+    },
+    {
+      "period": "2017-2026 (recent)",
+      "strategy": "XS long-only",
+      "months": 116,
+      "cagr_%": 16.75,
+      "sharpe": 1.053,
+      "max_dd_%": -16.3
+    },
+    {
+      "period": "2017-2026 (recent)",
+      "strategy": "TS absolute (long/flat)",
+      "months": 116,
+      "cagr_%": 10.17,
+      "sharpe": 0.939,
+      "max_dd_%": -19.2
+    },
+    {
+      "period": "2017-2026 (recent)",
+      "strategy": "SPY buy & hold",
+      "months": 116,
+      "cagr_%": 15.38,
+      "sharpe": 1.004,
+      "max_dd_%": -23.9
+    }
+  ],
+  "worst_drawdown": {
+    "depth_pct": -41.59,
+    "peak": "2009-02-28",
+    "trough": "2021-12-31",
+    "recovery": null,
+    "months_to_trough": 154
+  },
+  "worst_months": {
+    "2021-02-28": -16.614,
+    "2020-04-30": -14.576,
+    "2009-04-30": -12.735,
+    "2020-11-30": -11.732,
+    "2016-11-30": -11.435
+  },
+  "benchmark_relative": [
+    {
+      "strategy": "XS long-only",
+      "benchmark": "Equal-weight sectors",
+      "excess_%/yr": 1.08,
+      "t_stat": 0.74,
+      "sharpe_strat": 0.766,
+      "sharpe_bench": 0.735
+    },
+    {
+      "strategy": "XS long/short",
+      "benchmark": "SPY buy & hold",
+      "excess_%/yr": -8.35,
+      "t_stat": -1.67,
+      "sharpe_strat": 0.148,
+      "sharpe_bench": 0.72
+    },
+    {
+      "strategy": "TS absolute (long/flat)",
+      "benchmark": "Equal-weight sectors",
+      "excess_%/yr": -1.95,
+      "t_stat": -1.12,
+      "sharpe_strat": 0.886,
+      "sharpe_bench": 0.735
+    },
+    {
+      "strategy": "TS absolute (long/flat)",
+      "benchmark": "SPY buy & hold",
+      "excess_%/yr": -1.85,
+      "t_stat": -0.9,
+      "sharpe_strat": 0.886,
+      "sharpe_bench": 0.72
+    }
+  ],
+  "crash_protection": {
+    "worst20_bench_pct": -8.793,
+    "worst20_ts_pct": -4.086,
+    "best20_bench_pct": 8.824,
+    "best20_ts_pct": 4.179
+  },
+  "ts_exposure": {
+    "avg_gross_pct": 75.96,
+    "pct_months_fully_invested": 45.27,
+    "pct_months_flat": 6.42
+  },
+  "constant_exposure_control": {
+    "avg_exposure_pct": 75.96,
+    "twin_sharpe": 0.7351,
+    "ts_sharpe": 0.886,
+    "twin_cagr_pct": 7.822,
+    "ts_cagr_pct": 8.644,
+    "twin_maxdd_pct": -39.49,
+    "ts_maxdd_pct": -19.2,
+    "timing_excess_pct_yr": 0.638,
+    "timing_t": 0.517,
+    "up_capture_pct": 47.36,
+    "down_capture_pct": 46.47
+  }
+}

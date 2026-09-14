@@ -1,0 +1,5 @@
+strategy,benchmark,excess_%/yr,t_stat,sharpe_strat,sharpe_bench
+XS long-only,Equal-weight sectors,1.08,0.74,0.766,0.735
+XS long/short,SPY buy & hold,-8.35,-1.67,0.148,0.72
+TS absolute (long/flat),Equal-weight sectors,-1.95,-1.12,0.886,0.735
+TS absolute (long/flat),SPY buy & hold,-1.85,-0.9,0.886,0.72
