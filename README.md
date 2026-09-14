@@ -1,5 +1,7 @@
 # Momentum Trading — build, test, backtest
 
+[![CI](https://github.com/victorjumer999-dev/boob/actions/workflows/ci.yml/badge.svg)](https://github.com/victorjumer999-dev/boob/actions/workflows/ci.yml)
+
 A small, auditable momentum research toolkit built from the "Quantitative
 Finance Essentials 04/04 — Momentum Trading" reference sheet, plus a real-data
 backtest of every claim on it.
@@ -22,8 +24,9 @@ momentum/          the library
   synth.py         synthetic panels with a *known* planted edge, for the tests
 tests/             83 tests, incl. explicit look-ahead traps
 scripts/
-  run_backtest.py  the full study -> results/
-  make_charts.py   the chart panel  -> results/momentum_report.png
+  run_backtest.py   the full study -> results/
+  make_charts.py    the chart panel -> results/momentum_report.png
+  check_results.py  golden-result check: the study must reproduce REPORT.md
 data/raw/          cached monthly adjusted closes (Alpha Vantage)
 results/           CSVs, report.json, chart
 ```
@@ -34,8 +37,24 @@ results/           CSVs, report.json, chart
 pip install -r requirements.txt
 python -m pytest tests/ -q          # 83 passed
 python scripts/run_backtest.py      # prints the study, writes results/
+python scripts/check_results.py     # asserts the headline figures still hold
 python scripts/make_charts.py       # writes results/momentum_report.png
 ```
+
+## CI
+
+`.github/workflows/ci.yml` runs on every push and pull request:
+
+* **tests** — the full suite on Python 3.11, 3.12 and 3.13.
+* **study** — reproduces the whole pipeline end to end on the cached data,
+  then runs `check_results.py`, which asserts 19 headline figures still match
+  the ones quoted in `REPORT.md`. A backtest that silently reports different
+  numbers after a library upgrade is the same class of defect as the five
+  listed in the report: it does not crash, it just quietly says something
+  else. The rendered `results/` directory is uploaded as a build artifact.
+
+If a golden result changes intentionally, update both `scripts/check_results.py`
+and the figures quoted in `REPORT.md` — they are written into the prose.
 
 ## Data
 
